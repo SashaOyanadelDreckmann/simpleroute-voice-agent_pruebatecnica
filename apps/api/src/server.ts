@@ -6,67 +6,51 @@ import callRoutes from "./routes/call.route.js";
 const app = express();
 
 /* ======================================================
-   CORS CONFIG (UNA SOLA FUENTE DE VERDAD)
+   CORS — DEBE IR PRIMERO
 ====================================================== */
-
-const corsOptions: cors.CorsOptions = {
+const corsMiddleware = cors({
   origin: [
     "https://simpleroute-voice-agent-pruebatecni.vercel.app",
     "http://localhost:3000",
   ],
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type"],
-};
+});
+
+app.use(corsMiddleware);
+
+// 🔑 CRÍTICO: capturar preflight explícitamente
+app.options("*", corsMiddleware);
 
 /* ======================================================
-   Middleware
+   Parsers
 ====================================================== */
-
-// ✅ CORS aplicado a TODAS las requests
-app.use(cors(corsOptions));
-
-// ✅ Preflight (OBLIGATORIO para browser)
-app.options("*", cors(corsOptions));
-
-// JSON (para /call/start)
 app.use(express.json({ limit: "2mb" }));
 
 /* ======================================================
    Routes
 ====================================================== */
-
 app.use("/call", callRoutes);
 
 /* ======================================================
-   Healthcheck
+   Health
 ====================================================== */
-
 app.get("/health", (_req, res) => {
   res.json({ ok: true });
 });
 
 /* ======================================================
-   Error handling (mínimo pero profesional)
+   Fallback (para Railway)
 ====================================================== */
-
-app.use(
-  (
-    err: any,
-    _req: express.Request,
-    res: express.Response,
-    _next: express.NextFunction
-  ) => {
-    console.error("[API ERROR]", err);
-    res.status(500).json({ error: "Internal server error" });
-  }
-);
+app.use((_req, res) => {
+  res.status(404).json({ error: "Not found" });
+});
 
 /* ======================================================
    Server
 ====================================================== */
+const PORT = Number(process.env.PORT) || 3001;
 
-const PORT = process.env.PORT || 3001;
-
-app.listen(PORT, () => {
-  console.log(`API running on port ${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`API listening on port ${PORT}`);
 });
