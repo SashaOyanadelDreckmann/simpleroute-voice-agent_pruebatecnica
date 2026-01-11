@@ -15,12 +15,26 @@ export default function CallClientPage() {
   useEffect(() => {
     if (!caseId) return;
 
+    // 1️⃣ Intentar desde sessionStorage (cache)
     const raw = sessionStorage.getItem(`call:${caseId}`);
-    if (!raw) return;
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      setCtx(parsed.ctx);
+      setMessage(parsed.message);
+      return;
+    }
 
-    const parsed = JSON.parse(raw);
-    setCtx(parsed.ctx);
-    setMessage(parsed.message);
+    // 2️⃣ FALLBACK: pedir al backend
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE}/call/${caseId}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!data) return;
+        setCtx(data.ctx);
+        setMessage(data.message);
+      })
+      .catch(() => {
+        // opcional: manejo de error
+      });
   }, [caseId]);
 
   if (!caseId) {
