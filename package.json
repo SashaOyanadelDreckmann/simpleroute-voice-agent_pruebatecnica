@@ -7,7 +7,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "build": "pnpm -r --filter ./apps/** build",
+    "build": "pnpm --filter ./apps/api build",
     "start": "pnpm --filter ./apps/api start"
   }
 }
