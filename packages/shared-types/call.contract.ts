@@ -38,3 +38,4 @@ export type StartCallResponse = {
   caseId: string;
   firstMessage: string;
 };
+
