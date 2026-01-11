@@ -12,13 +12,17 @@ export default function CallClient() {
   const caseId = searchParams.get("caseId");
 
   const [ctx, setCtx] = useState<CallContext | null>(null);
-  const [message, setMessage] = useState<string>("");
+  const [message, setMessage] = useState("Cargando llamada…");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!caseId) return;
+    if (!caseId) {
+      setError("Missing caseId");
+      return;
+    }
 
     fetch(`${API_BASE}/call/${caseId}`)
-      .then((res) => {
+      .then(async (res) => {
         if (!res.ok) throw new Error("Call not found");
         return res.json();
       })
@@ -27,9 +31,14 @@ export default function CallClient() {
         setMessage(data.message);
       })
       .catch((err) => {
-        console.error("❌ Error loading call", err);
+        console.error(err);
+        setError("Call not found");
       });
   }, [caseId]);
+
+  if (error) {
+    return <div style={{ padding: 24 }}>{error}</div>;
+  }
 
   if (!ctx) {
     return <div style={{ padding: 24 }}>Cargando llamada…</div>;
@@ -37,4 +46,3 @@ export default function CallClient() {
 
   return <CallShell initialCtx={ctx} initialMessage={message} />;
 }
-
