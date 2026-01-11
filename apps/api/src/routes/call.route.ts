@@ -37,13 +37,13 @@ router.post("/start", (req, res) => {
 
   res.json({
     caseId,
-    ctx,            // ✅ CLAVE
-    message,        // ✅ CLAVE
+    ctx,
+    message,
   });
 });
 
 /* ======================================================
-   VOICE STEP (SIN CAMBIOS FUNCIONALES)
+   VOICE STEP
 ====================================================== */
 router.post(
   "/voice-step",
@@ -55,21 +55,17 @@ router.post(
         return res.status(400).json({ error: "Audio requerido" });
       }
 
-      let caseId: string | undefined;
-      try {
-        const raw = req.body?.ctx;
-        if (!raw) throw new Error("Missing ctx");
-        const parsed = JSON.parse(raw) as { caseId?: string };
-        caseId = parsed.caseId;
-      } catch {
+      const raw = req.body?.ctx;
+      if (!raw) {
         return res.status(400).json({ error: "ctx inválido" });
       }
 
+      const { caseId } = JSON.parse(raw) as { caseId?: string };
       if (!caseId) {
         return res.status(400).json({ error: "caseId es requerido" });
       }
 
-      const ctx = getCase(caseId) as CallContext | undefined;
+      const ctx = getCase(caseId);
       if (!ctx) {
         return res.status(404).json({ error: "Call not found" });
       }
@@ -133,7 +129,22 @@ router.post(
   }
 );
 
-export default router;
+/* ======================================================
+   GET CALL CONTEXT (FALLBACK)
+====================================================== */
+router.get("/:caseId", (req, res) => {
+  const { caseId } = req.params;
+
+  const ctx = getCase(caseId);
+  if (!ctx) {
+    return res.status(404).json({ error: "Call not found" });
+  }
+
+  res.json({
+    ctx,
+    message: "Continuamos donde quedamos.",
+  });
+});
 
 /* ======================================================
    Helpers
@@ -151,3 +162,5 @@ function isProfileComplete(ctx: CallContext): boolean {
     ctx.goalsCompleted.includes("ADDRESS_COLLECTED")
   );
 }
+
+export default router;
