@@ -1,0 +1,11 @@
+[setup]
+nixPkgs = ["nodejs_18", "pnpm"]
+
+[install]
+cmd = "pnpm install --frozen-lockfile"
+
+[build]
+cmd = "pnpm build"
+
+[start]
+cmd = "pnpm start"
