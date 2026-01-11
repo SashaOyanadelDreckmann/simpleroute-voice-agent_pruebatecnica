@@ -1,0 +1,170 @@
+/* ======================================================
+   SimpliRoute — Unified Mode (No light/dark switch)
+   Corporativo · IA · Premium
+====================================================== */
+
+.page {
+  /* ===============================
+     Core palette (SimpliRoute)
+  ================================ */
+  --background: radial-gradient(
+    1400px circle at 20% 15%,
+    #1b2f6e 0%,
+    #0e2354 40%,
+    #081633 75%,
+    #050f26 100%
+  );
+
+  --foreground: rgba(255, 255, 255, 0.04);
+
+  --text-primary: rgba(255, 255, 255, 0.96);
+  --text-secondary: rgba(255, 255, 255, 0.65);
+
+  /* ===============================
+     SimpliRoute purple (CTA)
+  ================================ */
+  --sr-purple: #6a5cff;
+  --sr-purple-hover: #5a4df0;
+
+  --button-secondary-border: rgba(255, 255, 255, 0.22);
+  --button-secondary-hover: rgba(255, 255, 255, 0.08);
+
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+
+  font-family: var(--font-geist-sans);
+  background: var(--background);
+}
+
+/* ======================================================
+   Main container
+====================================================== */
+.main {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 800px;
+
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  background: var(--foreground);
+  backdrop-filter: blur(14px);
+
+  padding: 120px 60px;
+}
+
+/* ======================================================
+   Intro
+====================================================== */
+.intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 24px;
+}
+
+.intro h1 {
+  max-width: 360px;
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 48px;
+  letter-spacing: -2.4px;
+  text-wrap: balance;
+
+  color: var(--text-primary);
+}
+
+.intro p {
+  max-width: 440px;
+  font-size: 18px;
+  line-height: 32px;
+  text-wrap: balance;
+
+  color: var(--text-secondary);
+}
+
+.intro a {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* ======================================================
+   CTAs
+====================================================== */
+.ctas {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 440px;
+  gap: 16px;
+  font-size: 14px;
+}
+
+.ctas a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 44px;
+  padding: 0 20px;
+
+  border-radius: 999px;
+  border: 1px solid transparent;
+
+  transition: all 0.25s ease;
+  cursor: pointer;
+  width: fit-content;
+
+  font-weight: 500;
+}
+
+/* ======================================================
+   Primary CTA — SimpliRoute purple
+====================================================== */
+a.primary {
+  background: var(--sr-purple);
+  color: white;
+  gap: 8px;
+}
+
+a.primary:hover {
+  background: var(--sr-purple-hover);
+}
+
+/* ======================================================
+   Secondary CTA
+====================================================== */
+a.secondary {
+  color: var(--text-primary);
+  border-color: var(--button-secondary-border);
+  background: transparent;
+}
+
+a.secondary:hover {
+  background: var(--button-secondary-hover);
+  border-color: transparent;
+}
+
+/* ======================================================
+   Responsive
+====================================================== */
+@media (max-width: 600px) {
+  .main {
+    padding: 48px 24px;
+  }
+
+  .intro {
+    gap: 16px;
+  }
+
+  .intro h1 {
+    font-size: 32px;
+    line-height: 40px;
+    letter-spacing: -1.92px;
+  }
+}

@@ -1,0 +1,122 @@
+/* ======================================================
+   SimpliRoute — Unified Dark Mode
+   Premium · Corporativo · Estable
+====================================================== */
+
+:root {
+  /* ===============================
+     Base background
+  ================================ */
+  --bg-main: radial-gradient(
+    1400px circle at 20% 15%,
+    #1b2f6e 0%,
+    #0e2354 38%,
+    #081633 72%,
+    #050f26 100%
+  );
+
+  --bg-panel: rgba(255, 255, 255, 0.045);
+
+  /* ===============================
+     Text
+  ================================ */
+  --ink: rgba(255, 255, 255, 0.96);
+  --ink-muted: rgba(255, 255, 255, 0.64);
+
+  /* ===============================
+     Borders & glass
+  ================================ */
+  --border-soft: rgba(110, 130, 255, 0.22);
+  --glass-soft: rgba(110, 130, 255, 0.09);
+
+  /* ===============================
+     Accent (SimpliRoute blue-violet)
+  ================================ */
+  --accent: #6a7cff;
+}
+
+/* ======================================================
+   Base layout
+====================================================== */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+
+  background: var(--bg-main);
+  color: var(--ink);
+
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "SF Pro Display", system-ui, sans-serif;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  overflow-x: hidden;
+}
+
+/* ======================================================
+   Global reset
+====================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ======================================================
+   Buttons
+====================================================== */
+button {
+  font-family: inherit;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* ======================================================
+   Inputs
+====================================================== */
+input,
+textarea {
+  font-family: inherit;
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+/* ======================================================
+   Selection
+====================================================== */
+::selection {
+  background: rgba(106, 124, 255, 0.28);
+}
+
+/* ======================================================
+   Scrollbar (WebKit)
+====================================================== */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(106, 124, 255, 0.35);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(106, 124, 255, 0.55);
+}
