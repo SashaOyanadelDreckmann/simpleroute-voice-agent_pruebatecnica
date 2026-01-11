@@ -9,13 +9,20 @@ const app = express();
    Middleware
 ====================================================== */
 
-// CORS explícito (demo)
+// ✅ CORS CORRECTO (incluye preflight)
 app.use(
   cors({
-    origin: "*", // en producción: dominio del frontend
-    methods: ["GET", "POST"],
+    origin: [
+      "https://simpleroute-voice-agent-pruebatecni.vercel.app",
+      "http://localhost:3000",
+    ],
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
   })
 );
+
+// 🔑 NECESARIO para preflight
+app.options("*", cors());
 
 // JSON (para /call/start)
 app.use(express.json({ limit: "2mb" }));
