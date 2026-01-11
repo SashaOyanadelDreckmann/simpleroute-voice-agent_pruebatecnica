@@ -1,4 +1,4 @@
-import { CallContext } from "../types/call.types";
+import { CallContext } from "../types/call.types.js";
 
 /**
  * Fake in-memory DB

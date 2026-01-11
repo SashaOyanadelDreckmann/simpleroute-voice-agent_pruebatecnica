@@ -21,6 +21,7 @@
     "@types/multer": "^2.0.0",
     "@types/node": "^20.11.30",
     "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.0.0",
     "tsx": "^4.7.0"
   }
 }

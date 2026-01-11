@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import callRoutes from "./routes/call.route";
+import callRoutes from "./routes/call.route.js";
 
 const app = express();
 

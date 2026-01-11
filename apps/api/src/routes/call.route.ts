@@ -3,10 +3,10 @@ import { Router, Response } from "express";
 import multer from "multer";
 import crypto from "crypto";
 
-import { decideNext } from "../agent/callAgent";
-import { createCase, getCase, updateCase } from "../db/fakeDb";
-import { asr, tts } from "../voice/voicePipeline";
-import type { CallContext, CallGoal } from "../types/call.types";
+import { decideNext } from "../agent/callAgent.js";
+import { createCase, getCase, updateCase } from "../db/fakeDb.js";
+import { asr, tts } from "../voice/voicePipeline.js";
+import type { CallContext, CallGoal } from "../types/call.types.js";
 
 const router = Router();
 const upload = multer({ storage: multer.memoryStorage() });
