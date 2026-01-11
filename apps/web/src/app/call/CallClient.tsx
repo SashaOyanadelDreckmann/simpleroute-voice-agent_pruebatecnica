@@ -1,48 +1,53 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import CallShell from "@/components/CallShell";
-import type { CallContext } from "shared-types/call.contract";
-
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE!;
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { startCall } from "@/lib/api";
 
 export default function CallClient() {
-  const searchParams = useSearchParams();
-  const caseId = searchParams.get("caseId");
-
-  const [ctx, setCtx] = useState<CallContext | null>(null);
-  const [message, setMessage] = useState("Cargando llamada…");
+  const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
-  useEffect(() => {
-    if (!caseId) {
-      setError("Missing caseId");
-      return;
+  async function handleStart() {
+    if (!name) return;
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      const res = await startCall(name);
+
+      // 🔑 GUARDAR POR caseId (CLAVE)
+      sessionStorage.setItem(
+        `call:${res.caseId}`,
+        JSON.stringify(res)
+      );
+
+      // 🔁 NAVEGAR CON caseId
+      router.push(`/call?caseId=${res.caseId}`);
+    } catch (err) {
+      console.error(err);
+      setError("Error iniciando la llamada. Intenta nuevamente.");
+    } finally {
+      setLoading(false);
     }
-
-    fetch(`${API_BASE}/call/${caseId}`)
-      .then(async (res) => {
-        if (!res.ok) throw new Error("Call not found");
-        return res.json();
-      })
-      .then((data) => {
-        setCtx(data.ctx);
-        setMessage(data.message);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError("Call not found");
-      });
-  }, [caseId]);
-
-  if (error) {
-    return <div style={{ padding: 24 }}>{error}</div>;
   }
 
-  if (!ctx) {
-    return <div style={{ padding: 24 }}>Cargando llamada…</div>;
-  }
+  return (
+    <div style={{ maxWidth: 420 }}>
+      <input
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Tu nombre"
+      />
 
-  return <CallShell initialCtx={ctx} initialMessage={message} />;
+      <button onClick={handleStart} disabled={loading}>
+        {loading ? "Iniciando..." : "Continuar"}
+      </button>
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
+    </div>
+  );
 }
