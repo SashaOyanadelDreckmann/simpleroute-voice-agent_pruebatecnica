@@ -142,7 +142,7 @@ router.get("/:caseId", (req, res) => {
 
   res.json({
     ctx,
-    message: "Continuamos donde quedamos.",
+    message: "puede que me demore en contestar pero siempre lo hago :) tu confia",
   });
 });
 
