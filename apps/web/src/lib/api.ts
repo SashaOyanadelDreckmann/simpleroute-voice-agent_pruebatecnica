@@ -1,10 +1,6 @@
-// apps/web/src/lib/api.ts
-import type {
-  CallContext,
-  StartCallResponse
-} from "shared-types/call.contract";
+import type { CallContext, StartCallResponse } from "shared-types";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE!;
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE!.replace(/\/$/, "");
 
 /* ===============================
    START CALL
@@ -31,7 +27,7 @@ export async function sendVoiceStep(audio: Blob, ctx: { caseId: string }) {
   form.append("audio", audio, "audio.wav");
   form.append("ctx", JSON.stringify({ caseId: ctx.caseId }));
 
-  const res = await fetch("http://localhost:3001/call/voice-step", {
+  const res = await fetch(`${API_BASE}/call/voice-step`, {
     method: "POST",
     body: form,
   });
@@ -41,20 +37,13 @@ export async function sendVoiceStep(audio: Blob, ctx: { caseId: string }) {
   const json = await res.json();
 
   return {
-    audio: new Blob(
-      [Uint8Array.from(atob(json.audio), c => c.charCodeAt(0))],
-      { type: "audio/wav" }
-    ),
+    audio: base64ToAudio(json.audio),
     transcript: json.transcript as string,
     say: json.say as string,
     ctx: json.ctx,
   };
 }
 
-
-/* ===============================
-   Helpers
-================================ */
 function base64ToAudio(b64: string): Blob {
   const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
   return new Blob([bytes], { type: "audio/wav" });
