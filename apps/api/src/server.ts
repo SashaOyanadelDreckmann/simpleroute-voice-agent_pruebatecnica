@@ -6,33 +6,41 @@ import callRoutes from "./routes/call.route.js";
 const app = express();
 
 /* ======================================================
+   CORS CONFIG (UNA SOLA FUENTE DE VERDAD)
+====================================================== */
+
+const corsOptions: cors.CorsOptions = {
+  origin: [
+    "https://simpleroute-voice-agent-pruebatecni.vercel.app",
+    "http://localhost:3000",
+  ],
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type"],
+};
+
+/* ======================================================
    Middleware
 ====================================================== */
 
-// ✅ CORS CORRECTO (incluye preflight)
-app.use(
-  cors({
-    origin: [
-      "https://simpleroute-voice-agent-pruebatecni.vercel.app",
-      "http://localhost:3000",
-    ],
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type"],
-  })
-);
+// ✅ CORS aplicado a TODAS las requests
+app.use(cors(corsOptions));
 
-// 🔑 NECESARIO para preflight
-app.options("*", cors());
+// ✅ Preflight (OBLIGATORIO para browser)
+app.options("*", cors(corsOptions));
 
 // JSON (para /call/start)
 app.use(express.json({ limit: "2mb" }));
 
-// Routes
+/* ======================================================
+   Routes
+====================================================== */
+
 app.use("/call", callRoutes);
 
 /* ======================================================
    Healthcheck
 ====================================================== */
+
 app.get("/health", (_req, res) => {
   res.json({ ok: true });
 });
@@ -40,6 +48,7 @@ app.get("/health", (_req, res) => {
 /* ======================================================
    Error handling (mínimo pero profesional)
 ====================================================== */
+
 app.use(
   (
     err: any,
@@ -55,8 +64,9 @@ app.use(
 /* ======================================================
    Server
 ====================================================== */
+
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
-  console.log(`API running on http://localhost:${PORT}`);
+  console.log(`API running on port ${PORT}`);
 });
